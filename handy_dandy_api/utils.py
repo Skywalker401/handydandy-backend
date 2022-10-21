@@ -4,6 +4,8 @@ import jwt
 import requests
 import environ
 
+
+env = environ.Env()
 environ.Env.read_env()
 
 
@@ -17,7 +19,7 @@ def jwt_decode_token(token):
     header = jwt.get_unverified_header(token)
     jwks = requests.get(
         # ENV FORMAT GOES HERE INSTEAD OF THE EMPTY STRING
-        'https://{}/.well-known/jwks.json'.format('')).json()
+        'https://{}/.well-known/jwks.json'.format(env('FORMAT'))).json()
     public_key = None
     for jwk in jwks['keys']:
         if jwk['kid'] == header['kid']:
@@ -27,7 +29,7 @@ def jwt_decode_token(token):
         raise Exception('Public key not found.')
 
     # ENV FORMAT GOES HEREINSTEAD OF THE EMPTY STRING
-    issuer = 'https://{}/'.format('')
+    issuer = 'https://{}/'.format(env('FORMAT'))
 
-    return jwt.decode(token, public_key, audience='', issuer=issuer, algorithms=['RS256'])
+    return jwt.decode(token, public_key, audience=env('AUDIENCE'), issuer=issuer, algorithms=['RS256'])
     # ENV AUDIENCE GOES HERE INSTEAD OF THE EMPTY STRING
