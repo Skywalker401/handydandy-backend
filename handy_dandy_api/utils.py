@@ -6,6 +6,11 @@ import environ
 
 environ.Env.read_env()
 
+env = environ.Env(
+    DEBUG=(bool, False),
+    ALLOWED_HOSTS=['localhost']
+)
+
 
 def jwt_get_username_from_payload_handler(payload):
     username = payload.get('sub').replace('|', '.')
@@ -27,7 +32,7 @@ def jwt_decode_token(token):
         raise Exception('Public key not found.')
 
     # ENV FORMAT GOES HEREINSTEAD OF THE EMPTY STRING
-    issuer = 'https://{}/'.format('')
+    issuer = 'https://{}/'.format('dev-4vam03w3.us.auth0.com')
 
-    return jwt.decode(token, public_key, audience='', issuer=issuer, algorithms=['RS256'])
+    return jwt.decode(token, public_key, audience='https://dev-4vam03w3.us.auth0.com/api/v2/', issuer=issuer, algorithms=['RS256'])
     # ENV AUDIENCE GOES HERE INSTEAD OF THE EMPTY STRING
