@@ -8,6 +8,11 @@ import environ
 env = environ.Env()
 environ.Env.read_env()
 
+env = environ.Env(
+    DEBUG=(bool, False),
+    ALLOWED_HOSTS=['localhost']
+)
+
 
 def jwt_get_username_from_payload_handler(payload):
     username = payload.get('sub').replace('|', '.')
@@ -18,7 +23,7 @@ def jwt_get_username_from_payload_handler(payload):
 def jwt_decode_token(token):
     header = jwt.get_unverified_header(token)
     jwks = requests.get(
-        # ENV FORMAT GOES HERE INSTEAD OF THE EMPTY STRING
+        
         'https://{}/.well-known/jwks.json'.format(env('FORMAT'))).json()
     public_key = None
     for jwk in jwks['keys']:
@@ -28,8 +33,9 @@ def jwt_decode_token(token):
     if public_key is None:
         raise Exception('Public key not found.')
 
-    # ENV FORMAT GOES HEREINSTEAD OF THE EMPTY STRING
+    
     issuer = 'https://{}/'.format(env('FORMAT'))
 
     return jwt.decode(token, public_key, audience=env('AUDIENCE'), issuer=issuer, algorithms=['RS256'])
-    # ENV AUDIENCE GOES HERE INSTEAD OF THE EMPTY STRING
+
+
