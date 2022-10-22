@@ -4,6 +4,8 @@ import jwt
 import requests
 import environ
 
+
+env = environ.Env()
 environ.Env.read_env()
 
 env = environ.Env(
@@ -22,7 +24,7 @@ def jwt_decode_token(token):
     header = jwt.get_unverified_header(token)
     jwks = requests.get(
         # ENV FORMAT GOES HERE INSTEAD OF THE EMPTY STRING
-        'https://{}/.well-known/jwks.json'.format('')).json()
+        'https://{}/.well-known/jwks.json'.format(env('FORMAT'))).json()
     public_key = None
     for jwk in jwks['keys']:
         if jwk['kid'] == header['kid']:
@@ -35,4 +37,5 @@ def jwt_decode_token(token):
     issuer = 'https://{}/'.format('dev-4vam03w3.us.auth0.com')
 
     return jwt.decode(token, public_key, audience='https://dev-4vam03w3.us.auth0.com/api/v2/', issuer=issuer, algorithms=['RS256'])
-    # ENV AUDIENCE GOES HERE INSTEAD OF THE EMPTY STRING
+
+
