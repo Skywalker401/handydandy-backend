@@ -1,4 +1,3 @@
-
 from .models import User
 from rest_framework import generics
 from .serializers import UserSerializer
@@ -54,13 +53,23 @@ def requires_scope(required_scope):
     return require_scope
 
 
-@api_view(['GET'])
+@api_view(['POST'])
 # @permission_classes([AllowAny])
 def get_user(request):
-    parsed_req = json.loads(request.body)
-    user = User.objects.get(sid=parsed_req["sid"])
-    serializer = UserSerializer(user)
-    return Response(serializer.data)
+    try:
+        parsed_req = json.loads(request.body)
+        print(parsed_req)
+        user = User.objects.get(sid=parsed_req["sid"])
+        serializer = UserSerializer(user)
+        if user:
+
+            return Response(serializer.data)
+
+    except:
+        response = Response('User not found')
+        response.status_code = 404
+
+        return response
 
 
 @api_view(['POST'])
