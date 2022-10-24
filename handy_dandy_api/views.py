@@ -19,7 +19,6 @@ class UserList(generics.ListCreateAPIView):
 class UserDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-# Create your views here.
 
 
 def get_token_auth_header(request):
@@ -56,14 +55,26 @@ def requires_scope(required_scope):
 
 
 @api_view(['GET'])
-@permission_classes([AllowAny])
-def user(request):
+# @permission_classes([AllowAny])
+def get_user(request):
     parsed_req = json.loads(request.body)
-    print('REQ', parsed_req)
     user = User.objects.get(sid=parsed_req["sid"])
     serializer = UserSerializer(user)
     return Response(serializer.data)
 
+
+@api_view(['POST'])
+# @permission_classes([AllowAny])
+def create_user(request):
+    serializer = UserSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    else:
+        return Response(serializer.errors)
+
+
+# test endpoints
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
