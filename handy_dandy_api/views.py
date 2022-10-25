@@ -8,6 +8,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 import json
+from django.core import serializers
 
 
 class UserList(generics.ListCreateAPIView):
@@ -58,12 +59,13 @@ def requires_scope(required_scope):
 def get_user(request):
     try:
         parsed_req = json.loads(request.body)
-        print(parsed_req)
-        user = User.objects.get(sid=parsed_req["sid"])
+        user = User.objects.get(sid=parsed_req["Sid"])
+        tasks = user.task_set.all()
+        tasks_serializer = TaskSerializer(tasks, many=True)
         serializer = UserSerializer(user)
         if user:
 
-            return Response(serializer.data)
+            return Response([serializer.data, tasks_serializer.data])
 
     except:
         response = Response('User not found')
@@ -88,6 +90,11 @@ class TaskList(generics.ListAPIView):
     serializer_class = TaskSerializer
 
 
+class UserList(generics.ListAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+
 class TaskDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
@@ -103,6 +110,7 @@ class ApplianceDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = ApplianceSerializer
 
 # test endpoints
+
 
 @api_view(['GET'])
 @permission_classes([AllowAny])

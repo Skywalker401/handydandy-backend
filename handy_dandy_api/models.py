@@ -34,7 +34,7 @@ class User(models.Model):
 
 
 class Task(models.Model):
-    owner = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=64)
     appliance = models.CharField(max_length=32)
     home_area = models.CharField(max_length=24)
