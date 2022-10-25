@@ -59,7 +59,7 @@ def requires_scope(required_scope):
 def get_user(request):
     try:
         parsed_req = json.loads(request.body)
-        user = User.objects.get(sid=parsed_req["Sid"])
+        user = User.objects.get(sid=parsed_req["sid"])
         tasks = user.task_set.all()
         tasks_serializer = TaskSerializer(tasks, many=True)
         serializer = UserSerializer(user)
@@ -78,6 +78,17 @@ def get_user(request):
 # @permission_classes([AllowAny])
 def create_user(request):
     serializer = UserSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    else:
+        return Response(serializer.errors)
+
+
+@api_view(['POST'])
+# @permission_classes([AllowAny])
+def create_task(request):
+    serializer = TaskSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data)

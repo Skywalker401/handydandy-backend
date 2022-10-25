@@ -10,8 +10,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 class TaskSerializer(serializers.ModelSerializer):
     class Meta:
-        fields = ('owner', 'name', 'appliance', 'home_area', 'description', 'diy_links', 'period_months',
-                  'last_performed',)
+        fields = '__all__'
         model = Task
 
 
@@ -19,4 +18,3 @@ class ApplianceSerializer(serializers.ModelSerializer):
     class Meta:
         feilds = ('owner', 'name', 'model', 'serial_numer',)
         model = Appliance
-
