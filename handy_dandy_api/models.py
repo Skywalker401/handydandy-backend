@@ -4,6 +4,7 @@ from django.db import models
 
 # Create your models here.
 class User(models.Model):
+    sid = models.CharField(max_length=128)
     name = models.CharField(max_length=256)
     address = models.CharField(max_length=256)
     city = models.CharField(max_length=256)
