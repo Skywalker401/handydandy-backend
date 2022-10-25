@@ -1,6 +1,6 @@
-from .models import User
+from .models import User, Task, Appliance
 from rest_framework import generics
-from .serializers import UserSerializer
+from .serializers import UserSerializer, TaskSerializer, ApplianceSerializer
 from functools import wraps
 import jwt
 from django.http import JsonResponse
@@ -82,6 +82,25 @@ def create_user(request):
     else:
         return Response(serializer.errors)
 
+
+class TaskList(generics.ListAPIView):
+    queryset = Task.objects.all()
+    serializer_class = TaskSerializer
+
+
+class TaskDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Task.objects.all()
+    serializer_class = TaskSerializer
+
+
+class ApplianceList(generics.ListAPIView):
+    queryset = Appliance.objects.all()
+    serializer_class = ApplianceSerializer
+
+
+class ApplianceDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Appliance.objects.all()
+    serializer_class = ApplianceSerializer
 
 # test endpoints
 
