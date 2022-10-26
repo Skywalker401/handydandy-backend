@@ -9,6 +9,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 import json
+from django.core import serializers
 
 
 class UserList(generics.ListCreateAPIView):
@@ -63,11 +64,8 @@ def get_user(request):
         tasks = user.task_set.all()
         tasks_serializer = TaskSerializer(tasks, many=True)
         serializer = UserSerializer(user)
+        print(serializer)
         if user:
-            if user.is_pro:
-                comp_serializer = CompetenciesSerializer(user.competencies)
-
-                return Response([serializer.data, tasks_serializer.data, comp_serializer.data])
 
             return Response([serializer.data, tasks_serializer.data])
 
