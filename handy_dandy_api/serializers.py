@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User, Task, Appliance
+from .models import User, Task, Competencies
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -14,7 +14,7 @@ class TaskSerializer(serializers.ModelSerializer):
         model = Task
 
 
-class ApplianceSerializer(serializers.ModelSerializer):
+class CompetenciesSerializer(serializers.ModelSerializer):
     class Meta:
-        feilds = ('owner', 'name', 'model', 'serial_numer',)
-        model = Appliance
+        fields = '__all__'
+        model = Competencies
