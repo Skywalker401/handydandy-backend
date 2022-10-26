@@ -9,28 +9,17 @@ class User(models.Model):
     address = models.CharField(max_length=256)
     city = models.CharField(max_length=256)
     zip = models.CharField(max_length=10)
-    # task_set = () foriegn keys of all tasks that have their owner assigned to this user
-    # appliance_set = () same as above but appliances
+    is_pro = models.BooleanField(default=False)
+
+    # task_set = () foriegn keys of all tasks that have their owner assigned to this user (Automatically generated.
+    # This feild exists without manual creation One-to-Many relation. Accessing owned tasks: "user.task_set.all()" and
+    # 'user.appliance_set.all()". Another way is this: Task.objects.filter(owner_id=[the user's id])
+
+    # competencies = {...}
+    # reference with user.competencies. One-to-one relation
 
     def __str__(self):
         return self.name
-
-    # I don't think we need these helped functions below and I think they're awful syntax anyways. I think we have
-    # access elsewhere via "user.task_set.all()" and 'user.appliance_set.all()". leaving this here for now just in
-    # case we do need something like this.
-    # Another way is this: Task.objects.filter(owner_id=[the user's id])
-
-    # def get_tasks(self):
-    #     if self.task_set:
-    #         return [Task.objects.filter(pk=task) for task in self.task_set]
-    #     else:
-    #         return None
-    #
-    # def get_appliances(self):
-    #     if self.appliance_set:
-    #         return [Appliance.objects.get(pk=appliance) for appliance in self.appliance_set]
-    #     else:
-    #         return None
 
 
 class Task(models.Model):
@@ -44,8 +33,10 @@ class Task(models.Model):
     last_performed = models.DateField()
 
 
-class Appliance(models.Model):
-    owner = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
-    name = models.CharField(max_length=32)
-    model = models.CharField(max_length=128)
-    serial_number = models.CharField(max_length=128)
+class Competencies(models.Model):
+    owner = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    hvac = models.BooleanField(default=False)
+    electrical = models.BooleanField(default=False)
+    carpentry = models.BooleanField(default=False)
+    plumbing = models.BooleanField(default=False)
+    # Add more later
