@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import UserList, UserDetail, public, private, private_scoped, get_user, create_user, create_task, TaskList, TaskDetail, ApplianceList, ApplianceDetail, UserList
+from .views import UserList, UserDetail, public, private, private_scoped, get_user, create_user, create_task, TaskList, TaskDetail, UserList
 
 urlpatterns = [
     path('', UserList.as_view(), name='user_list'),
@@ -12,7 +12,5 @@ urlpatterns = [
     path('create-task', create_task),
     path('task-list', TaskList.as_view(), name='task_list'),
     path('task/<int:pk>', TaskDetail.as_view(), name='task_detail'),
-    path('appliance-list', ApplianceList.as_view(), name='appliance_list'),
-    path('appliance/<int:pk>', ApplianceDetail.as_view(), name='appliance_detail'),
     path('user-list', UserList.as_view(), name='user_list'),
 ]
