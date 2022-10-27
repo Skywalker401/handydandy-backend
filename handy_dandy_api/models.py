@@ -1,3 +1,5 @@
+from email.policy import default
+from unittest.util import _MAX_LENGTH
 from django.db import models
 
 
@@ -33,9 +35,10 @@ class Competencies(models.Model):
 class Task(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=64)
-    home_area = models.CharField(max_length=24)
+    is_complete = models.BooleanField(default=False)
+    category = models.CharField(max_length=24)
     description = models.TextField(default='')
-    period_months = models.IntegerField()
+    period_months = models.CharField(max_length=12)
     last_performed = models.DateField()
 
     # Add more later

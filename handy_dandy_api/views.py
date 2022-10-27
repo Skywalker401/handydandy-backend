@@ -97,6 +97,16 @@ def create_task(request):
         return Response(serializer.errors)
 
 
+@api_view(['POST'])
+# @permission_classes([AllowAny])
+def delete_task(request):
+    parsed_body = json.loads(request.body)
+    task = Task.objects.get(id=parsed_body["id"])
+    task.delete()
+
+    return JsonResponse({'message': 'DELETED'})
+
+
 class TaskList(generics.ListAPIView):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
