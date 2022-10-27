@@ -9,7 +9,6 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 import json
-from django.core import serializers
 
 
 class UserList(generics.ListCreateAPIView):
@@ -67,6 +66,25 @@ def get_user(request):
         if user:
 
             return Response([serializer.data, tasks_serializer.data])
+
+    except:
+        response = Response('User not found')
+        response.status_code = 404
+
+        return response
+
+
+@api_view(['POST'])
+# @permission_classes([AllowAny])
+def get_pros(request):
+    try:
+        parsed_req = json.loads(request.body)
+        pros = User.objects.filter(zip=parsed_req["zip"])
+        pro_serializer = UserSerializer(pros, many=True)
+
+        if pros:
+
+            return Response(pro_serializer.data)
 
     except:
         response = Response('User not found')
