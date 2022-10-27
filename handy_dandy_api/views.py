@@ -1,5 +1,5 @@
 from time import clock_getres
-from .models import User, Task
+from .models import Competencies, User, Task
 from rest_framework import generics
 from .serializers import UserSerializer, TaskSerializer, CompetenciesSerializer
 from functools import wraps
@@ -9,6 +9,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 import json
+from django.core import serializers
 
 
 class UserList(generics.ListCreateAPIView):
@@ -64,10 +65,6 @@ def get_user(request):
         tasks_serializer = TaskSerializer(tasks, many=True)
         serializer = UserSerializer(user)
         if user:
-            if user.is_pro:
-                comp_serializer = CompetenciesSerializer(user.competencies)
-
-                return Response([serializer.data, tasks_serializer.data, comp_serializer.data])
 
             return Response([serializer.data, tasks_serializer.data])
 

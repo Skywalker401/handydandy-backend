@@ -1,4 +1,3 @@
-from django.contrib.auth import get_user_model
 from django.db import models
 
 
@@ -22,21 +21,21 @@ class User(models.Model):
         return self.name
 
 
-class Task(models.Model):
-    owner = models.ForeignKey(User, on_delete=models.CASCADE)
-    name = models.CharField(max_length=64)
-    appliance = models.CharField(max_length=32)
-    home_area = models.CharField(max_length=24)
-    description = models.TextField(default='')
-    diy_links = models.TextField(default='')
-    period_months = models.IntegerField()
-    last_performed = models.DateField()
-
-
 class Competencies(models.Model):
-    owner = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    owner = models.OneToOneField(
+        User, on_delete=models.CASCADE, null=True)
     hvac = models.BooleanField(default=False)
     electrical = models.BooleanField(default=False)
     carpentry = models.BooleanField(default=False)
     plumbing = models.BooleanField(default=False)
+
+
+class Task(models.Model):
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=64)
+    home_area = models.CharField(max_length=24)
+    description = models.TextField(default='')
+    period_months = models.IntegerField()
+    last_performed = models.DateField()
+
     # Add more later
