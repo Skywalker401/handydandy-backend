@@ -9,6 +9,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 import json
+from django.db.models import Q
 
 
 class UserList(generics.ListCreateAPIView):
@@ -79,7 +80,8 @@ def get_user(request):
 def get_pros(request):
     try:
         parsed_req = json.loads(request.body)
-        pros = User.objects.filter(zip=parsed_req["zip"])
+        pros = User.objects.filter(
+            Q(zip=parsed_req["zip"]) & Q(is_pro=True))
         pro_serializer = UserSerializer(pros, many=True)
 
         if pros:
@@ -113,6 +115,19 @@ def create_task(request):
         return Response(serializer.data)
     else:
         return Response(serializer.errors)
+
+
+@api_view(['POST'])
+# @permission_classes([AllowAny])
+def update_task(request):
+    parsed_req = json.loads(request.body)
+    task = Task.objects.get(id=parsed_req["id"])
+    data = TaskSerializer(instance=task, data=request.data)
+    if data.is_valid():
+        data.save()
+        return Response(data.data)
+    else:
+        return Response(data.errors)
 
 
 @api_view(['POST'])
