@@ -22,8 +22,8 @@ class User(models.Model):
 
 
 class Competencies(models.Model):
-    owner = models.ForeignKey(
-        User, on_delete=models.CASCADE)
+    owner = models.OneToOneField(
+        User, on_delete=models.CASCADE, null=True)
     hvac = models.BooleanField(default=False)
     electrical = models.BooleanField(default=False)
     carpentry = models.BooleanField(default=False)

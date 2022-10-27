@@ -22,8 +22,7 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
 
     def create(self, validated_data):
-        user = User.objects.create(
-            **validated_data)
-        Competencies.objects.create(owner=user,
-                                    **validated_data["competencies"])
+        competencies = validated_data.pop('competencies')
+        user = User.objects.create(**validated_data)
+        Competencies.objects.create(owner=user, **competencies)
         return user

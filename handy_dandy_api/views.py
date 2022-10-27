@@ -1,5 +1,5 @@
 from time import clock_getres
-from .models import User, Task
+from .models import Competencies, User, Task
 from rest_framework import generics
 from .serializers import UserSerializer, TaskSerializer, CompetenciesSerializer
 from functools import wraps
@@ -64,7 +64,6 @@ def get_user(request):
         tasks = user.task_set.all()
         tasks_serializer = TaskSerializer(tasks, many=True)
         serializer = UserSerializer(user)
-        print(serializer)
         if user:
 
             return Response([serializer.data, tasks_serializer.data])
