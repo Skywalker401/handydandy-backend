@@ -1,11 +1,10 @@
 from django.urls import path
-from .views import UserList, UserDetail, delete_task, public, private, private_scoped, get_user, create_user, create_task, delete_task, get_pros, update_task, TaskList, TaskDetail, UserList
+from .views import UserList, UserDetail, delete_task, public, private_scoped, get_user, create_user, create_task, delete_task, get_pros, update_task, TaskList, TaskDetail, UserList
 
 urlpatterns = [
     path('', UserList.as_view(), name='user_list'),
     path('<int:pk>', UserDetail.as_view(), name='user_detail'),
     path('public', public),
-    path('private', private),
     path('private-scoped', private_scoped),
     path('get-user', get_user),
     path('get-pros', get_pros),

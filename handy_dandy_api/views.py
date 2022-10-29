@@ -1,7 +1,6 @@
-from time import clock_getres
-from .models import Competencies, User, Task
+from .models import User, Task
 from rest_framework import generics
-from .serializers import UserSerializer, TaskSerializer, CompetenciesSerializer
+from .serializers import UserSerializer, TaskSerializer
 from functools import wraps
 import jwt
 from django.http import JsonResponse
@@ -56,7 +55,6 @@ def requires_scope(required_scope):
 
 
 @api_view(['POST'])
-# @permission_classes([AllowAny])
 def get_user(request):
     try:
         parsed_req = json.loads(request.body)
@@ -76,7 +74,6 @@ def get_user(request):
 
 
 @api_view(['POST'])
-# @permission_classes([AllowAny])
 def get_pros(request):
     try:
         parsed_req = json.loads(request.body)
@@ -96,7 +93,6 @@ def get_pros(request):
 
 
 @api_view(['POST'])
-# @permission_classes([AllowAny])
 def create_user(request):
     serializer = UserSerializer(data=request.data)
     if serializer.is_valid():
@@ -107,7 +103,6 @@ def create_user(request):
 
 
 @api_view(['POST'])
-# @permission_classes([AllowAny])
 def create_task(request):
     serializer = TaskSerializer(data=request.data)
     if serializer.is_valid():
@@ -118,7 +113,6 @@ def create_task(request):
 
 
 @api_view(['POST'])
-# @permission_classes([AllowAny])
 def update_task(request):
     parsed_req = json.loads(request.body)
     task = Task.objects.get(id=parsed_req["id"])
@@ -131,7 +125,6 @@ def update_task(request):
 
 
 @api_view(['POST'])
-# @permission_classes([AllowAny])
 def delete_task(request):
     parsed_body = json.loads(request.body)
     task = Task.objects.get(id=parsed_body["id"])
@@ -162,11 +155,6 @@ class TaskDetail(generics.RetrieveUpdateDestroyAPIView):
 @permission_classes([AllowAny])
 def public(request):
     return JsonResponse({'message': 'Hello from a public endpoint! You don\'t need to be authenticated to see this.'})
-
-
-@api_view(['GET'])
-def private(request):
-    return JsonResponse({'message': 'Hello from a private endpoint! You need to be authenticated to see this.'})
 
 
 @api_view(['GET'])

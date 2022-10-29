@@ -1,12 +1,9 @@
-from pprint import pprint
-
 import django.contrib.auth
 from django.test import TestCase
 from .models import User, Competencies
 from django.test import Client
 from django.urls import reverse
-from .views import UserList, UserDetail
-from . import views
+
 
 
 class BackendTests(TestCase):
@@ -81,15 +78,14 @@ class URLTests(TestCase):
         auth_user.save()
 
     def test_user_list(self):
-        # Log in.
+        # Log in
         client = Client()
         response = client.login(username='testUser', password='Hello')
         assert response
 
         response = client.get(reverse('user_list'))
         self.assertEqual(response.status_code, 200)
-        # Used for helping create assertions to test.
-        # pprint(response.json())
+        
 
         assert len(response.json()) == 1
 
@@ -107,5 +103,5 @@ class URLTests(TestCase):
 
         response = client.get(reverse('user_detail', args=[1]))
         self.assertEqual(response.status_code, 200)
-        pprint(response.json())
+        
 
